@@ -10,18 +10,17 @@
 		<div class="container mt-5">
       <div class="row">
         <div class="col-12">
-          <h3>Show {{ githubUsername }} Github Repositories</h3>
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">List</h3>
+              <h3 class="card-title">Show "{{ githubUsername }}" Github Repositories</h3>
               <div class="card-tools">
                 <div class="input-group input-group-sm" style="max-width: 200px;">
-                  <input type="text" v-model="searchFilter" @keyup="()=> { this._.delay(()=> this.getDataFromApi(), 1000) }" class="form-control float-right" placeholder="Search">
+                  <!-- <input type="text" v-model="searchFilter" @keyup="()=> { this._.delay(()=> this.getDataFromApi(), 1000) }" class="form-control float-right" placeholder="Search"> -->
 
-                  <div class="input-group-append">
+                  <!-- <div class="input-group-append">
                   <button type="submit" class="btn btn-default" @click="()=> { this.getDataFromApi();}">
                     <i class="fas fa-search"></i>
-                  </button>
+                  </button> -->
                   </div>
                 </div>
               </div>
@@ -88,25 +87,40 @@ export default {
             return (this.pageIndex - 1) * this.pageSize + 1 + rowIndex;
 					}					
 				},
-				{ field: "name", key: "b", title: "Repo's Name", align: "left", sortBy: "" },
 				{ 
-					field: "visibility", key: "c", title: "Visibility", align: "center", sortBy: "",
-				},
-				
-				{
-					field: "url",
-					key: "d",
-					title: "URL",
-					align: "left",
-          sortBy: "",
-				},
-				{
+          field: "name", key: "b", title: "Repo's Name", align: "left", sortBy: "", 
+          renderBodyCell: ({row, column, rowIndex}, h)=> {
+						const name = row[column.field];
+						const url = row['url'];
+						return (
+              <div>
+                <div><b>{name}</b></div>
+                <div class="text-muted">{url}</div>
+              </div>
+            );
+					},
+        },
+
+        {
 					field: "language",
-					key: "e",
+					key: "c",
 					title: "Language",
 					align: "left",
 					sortBy: ""
 				},
+
+				{ 
+					field: "visibility", key: "e", title: "Visibility", align: "center", sortBy: "",
+				},
+				
+				// {
+				// 	field: "url",
+				// 	key: "d",
+				// 	title: "URL",
+				// 	align: "left",
+        //   sortBy: "",
+				// },
+				
 				{
 					field: "watchers_count",
 					key: "f",
@@ -120,6 +134,10 @@ export default {
 					title: "Created At",
 					align: "center",
           sortBy: "",
+          renderBodyCell: ({row, column, rowIndex}, h)=> {
+						const text = this.$moment(row[column.field]).format("ll")
+						return text;
+					},
 				},
         {
 					field: "updated_at",
@@ -127,6 +145,10 @@ export default {
 					title: "Updated At",
 					align: "center",
           sortBy: "",
+          renderBodyCell: ({row, column, rowIndex}, h)=> {
+						const text = this.$moment(row[column.field]).format("ll")
+						return text;
+					},
 				},
 			],
 			// page index
@@ -200,7 +222,7 @@ export default {
 					},
 				});
 
-				this.totalCount = 1000; // data.length;
+				this.totalCount = (this.pageIndex + 1) * this.pageSize;
 				this.tableData = data;
 				this.isLoading = false;
 
