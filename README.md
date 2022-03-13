@@ -1,6 +1,9 @@
 # github-repos
 
-## Build Setup
+## Intro
+Projek ini bertujuan untuk menampilkan repositori yang ada didalam satu username Github, default username: ```defunkt```. Anda bisa mengganti username lainnya dengan menambahkan URL Query ```username=NamaUsernameGithub```. Contoh ketika running halaman http://localhost:3000?username=azisn11s
+
+## Build Setup NuxtJS (VueJS)
 
 ```bash
 # install dependencies
